@@ -8,7 +8,7 @@ Interactive Streamlit app visualising how word embeddings encode gender stereoty
 - **Pre-built word groups:** Jobs, Family, Royalty, Gendered Pairs, Adjectives, Socioeconomic
 - **Bias analysis:** Bar chart + table showing cosine similarity to male/female anchors
 - **Word analogy explorer:** `king - man + woman ≈ queen`
-- **~170 curated words** — no multi-GB download needed (433 KB subset included)
+- **~170 curated words** — no multi-GB download needed (71 KB subset, 50d)
 
 ## Run locally
 

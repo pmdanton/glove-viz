@@ -1,4 +1,4 @@
-"""Load the curated GloVe subset (~170 words, 433 KB).
+"""Load the curated GloVe subset (~170 words, 50d).
 
 No download needed — glove_subset.txt is committed to the repo.
 """
