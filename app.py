@@ -79,11 +79,11 @@ with st.sidebar:
     st.subheader("Gender anchors")
     anchor_man_words = st.text_input(
         "Masculine anchor words (comma-separated)",
-        value="man, male, masculine",
+        value="man",
     )
     anchor_woman_words = st.text_input(
         "Feminine anchor words (comma-separated)",
-        value="woman, female, feminine",
+        value="woman",
     )
 
 # ── Resolve anchors ──────────────────────────────────────────────────────────
