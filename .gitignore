@@ -1,0 +1,4 @@
+data/glove.6B.*
+__pycache__/
+*.pyc
+.venv/

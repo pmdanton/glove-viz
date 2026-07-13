@@ -1,0 +1,17 @@
+[project]
+name = "glove-viz"
+version = "0.1.0"
+description = "GloVe Gender Bias Explorer — visualise word embeddings in 2D"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.11.0",
+    "numpy>=2.5.1",
+    "pandas>=3.0.3",
+    "plotly>=6.9.0",
+    "scikit-learn>=1.9.0",
+    "streamlit>=1.59.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/glove_viz"]
