@@ -116,20 +116,34 @@ bias_scores = compute_bias_scores(valid_words, vectors, anchor_man, anchor_woman
 
 # ── Projection ───────────────────────────────────────────────────────────────
 if projection == "PCA":
-    coords = project_pca(vectors)
+    # Include anchors in projection so we can plot them
+    all_vecs = np.vstack([vectors, anchor_man.reshape(1, -1), anchor_woman.reshape(1, -1)])
+    all_coords = project_pca(all_vecs)
+    coords = all_coords[:len(valid_words)]
+    man_coord = all_coords[len(valid_words)]
+    woman_coord = all_coords[len(valid_words) + 1]
     x_label, y_label = "PC1", "PC2"
 elif projection == "t-SNE":
-    coords = project_tsne(vectors, perplexity)
+    all_vecs = np.vstack([vectors, anchor_man.reshape(1, -1), anchor_woman.reshape(1, -1)])
+    all_coords = project_tsne(all_vecs, perplexity)
+    coords = all_coords[:len(valid_words)]
+    man_coord = all_coords[len(valid_words)]
+    woman_coord = all_coords[len(valid_words) + 1]
     x_label, y_label = "t-SNE 1", "t-SNE 2"
 elif projection == "UMAP":
-    coords_umap = project_umap(vectors, n_neighbors)
+    all_vecs = np.vstack([vectors, anchor_man.reshape(1, -1), anchor_woman.reshape(1, -1)])
+    coords_umap = project_umap(all_vecs, n_neighbors)
     if coords_umap is None:
         st.error("UMAP requires `umap-learn`. Install it: `uv add umap-learn`")
         st.stop()
-    coords = coords_umap
+    coords = coords_umap[:len(valid_words)]
+    man_coord = coords_umap[len(valid_words)]
+    woman_coord = coords_umap[len(valid_words) + 1]
     x_label, y_label = "UMAP 1", "UMAP 2"
 elif projection == "Gender Axis":
     coords, v_gender, v_orth = project_gender_axis(vectors, anchor_man, anchor_woman)
+    man_coord = None  # handled separately
+    woman_coord = None
     x_label = "← woman ··· gender axis ··· man →"
     y_label = "orthogonal"
 else:
@@ -193,6 +207,32 @@ with col_plot:
                            text="← woman", showarrow=False, font=dict(size=14, color="red"))
         fig.add_annotation(x=df_plot["x"].max() + 0.05 * x_range, y=0,
                            text="man →", showarrow=False, font=dict(size=14, color="blue"))
+
+    # Anchor markers for PCA / t-SNE / UMAP
+    if projection in ("PCA", "t-SNE", "UMAP"):
+        fig.add_trace(go.Scatter(
+            x=[man_coord[0]], y=[man_coord[1]],
+            mode="markers+text", text=["♂ MAN"], textposition="top center",
+            marker=dict(size=20, color="#4a90d9", symbol="star", line=dict(width=2, color="black")),
+            textfont=dict(size=16, color="#4a90d9", family="Arial Black"),
+            showlegend=False,
+        ))
+        fig.add_trace(go.Scatter(
+            x=[woman_coord[0]], y=[woman_coord[1]],
+            mode="markers+text", text=["♀ WOMAN"], textposition="top center",
+            marker=dict(size=20, color="#d94a6b", symbol="star", line=dict(width=2, color="black")),
+            textfont=dict(size=16, color="#d94a6b", family="Arial Black"),
+            showlegend=False,
+        ))
+        # Arrow from woman to man
+        fig.add_annotation(
+            x=man_coord[0], y=man_coord[1],
+            ax=woman_coord[0], ay=woman_coord[1],
+            xref="x", yref="y", axref="x", ayref="y",
+            showarrow=True, arrowhead=3, arrowsize=2, arrowwidth=4,
+            arrowcolor="rgba(100,100,100,0.5)",
+            opacity=0.7,
+        )
 
     fig.update_layout(
         xaxis_title=x_label,
