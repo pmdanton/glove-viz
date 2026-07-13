@@ -8,7 +8,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from src.glove_viz.analogy import solve_analogy
 from src.glove_viz.loader import get_vectors, load_glove
 from src.glove_viz.presets import GENDER_ANCHORS, PRESETS
 from src.glove_viz.projections import project_gender_axis, project_pca, project_tsne, project_umap
@@ -243,39 +242,9 @@ with col_analysis:
         },
     )
 
-# ── Word Analogy Explorer ────────────────────────────────────────────────────
-st.divider()
-st.subheader("🔤 Word Analogy Explorer")
-st.markdown("**a** is to **b** as **c** is to **?**  —  e.g. *king* − *man* + *woman* ≈ *queen*")
-
-col_a, col_b, col_c, col_go = st.columns([1, 1, 1, 0.5])
-with col_a:
-    ana_a = st.text_input("a", value="king")
-with col_b:
-    ana_b = st.text_input("b", value="man")
-with col_c:
-    ana_c = st.text_input("c", value="woman")
-with col_go:
-    st.write("")
-    st.write("")
-    run_analogy = st.button("Solve", type="primary")
-
-if run_analogy:
-    try:
-        results = solve_analogy(ana_a, ana_b, ana_c, glove, top_k=10)
-        df_ana = pd.DataFrame(results, columns=["word", "similarity"])
-        df_ana["similarity"] = df_ana["similarity"].round(4)
-
-        st.markdown(f"**{ana_a}** − **{ana_b}** + **{ana_c}** ≈ ?")
-        for i, row in df_ana.iterrows():
-            medal = ["🥇", "🥈", "🥉"][i] if i < 3 else f"{i+1}."
-            st.markdown(f"{medal} **{row['word']}**  (similarity: {row['similarity']:.4f})")
-    except ValueError as e:
-        st.error(str(e))
-
 # ── Footer ───────────────────────────────────────────────────────────────────
 st.divider()
 st.caption(
     "GloVe embeddings: Pennington, Socher & Manning (2014). "
-    "Vectors are 300-dimensional, trained on 6B tokens (Wikipedia 2014 + Gigaword 5)."
+    f"Vectors are {dim}-dimensional, trained on 6B tokens (Wikipedia 2014 + Gigaword 5)."
 )
