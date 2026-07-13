@@ -2,3 +2,7 @@ data/glove.6B.*
 __pycache__/
 *.pyc
 .venv/
+*.egg-info/
+main.py
+test_integration.py
+PLAN.md
