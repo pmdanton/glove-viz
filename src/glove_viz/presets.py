@@ -26,6 +26,13 @@ PRESETS: dict[str, list[str]] = {
         "strong", "gentle", "tough", "soft", "brave", "beautiful",
         "rational", "emotional", "aggressive", "nurturing", "assertive",
         "passive", "dominant", "submissive", "logical", "intuitive",
+        "competitive", "cooperative", "ambitious", "modest", "confident",
+    ],
+    "Socioeconomic": [
+        "educated", "uneducated", "manual", "skilled", "unskilled",
+        "advanced", "basic", "rich", "poor", "wealthy", "destitute",
+        "elite", "working", "upper", "lower", "middle",
+        "privileged", "disadvantaged", "powerful", "powerless",
     ],
 }
 

@@ -30,7 +30,7 @@ st.markdown(
 
 # ── Load GloVe ───────────────────────────────────────────────────────────────
 glove = load_glove()
-st.success(f"Loaded **{len(glove):,}** word vectors (300d)")
+st.caption(f"Loaded **{len(glove):,}** curated word vectors (300d GloVe subset)")
 
 # ── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
